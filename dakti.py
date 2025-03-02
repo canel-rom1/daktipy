@@ -1,5 +1,6 @@
 
 import tkinter as tk
+import pyttsx3
 import subprocess
 
 liste_mots = []
@@ -15,9 +16,17 @@ root.geometry("1000x600")
 afficher_lettre = tk.BooleanVar(root, value=True)
 jouer_son = tk.BooleanVar(root, value=True)
 
+
+# Initialisation du moteur de synthèse vocale
+moteur = pyttsx3.init()
+
 def parler(texte):
-    if jouer_son.get():
-        subprocess.run(["espeak", "-v", "fr", texte])
+        moteur.say(texte)
+        moteur.runAndWait()
+
+#def parler(texte):
+#    if jouer_son.get():
+#        subprocess.run(["espeak", "-v", "fr", texte])
 
 def verifier_touche(event):
     global index_lettre, mot_index
