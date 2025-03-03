@@ -20,7 +20,7 @@ def parler(texte):
 
 liste_mots = []
 mot_index = 0
-mot_a_taper = ""
+mot_a_taper = "toucan"
 index_lettre = 0
 
 # Création de la fenêtre
@@ -68,6 +68,8 @@ def verifier_touche(event):
     else:
         label_statut.config(text="🎉 Mot correct !", fg="blue")
         parler("Bravo !")
+        parler("Le mot était")
+        root.after(200, lambda: parler(mot_a_taper))
         root.bind("<Return>", prochain_mot)
 
 def afficher_lettre_majuscule():
@@ -132,6 +134,7 @@ root.grid_columnconfigure(2, weight=1)
 
 # Champ pour entrer plusieurs mots
 entry_mot = tk.Entry(root, font=("Arial", 14))
+entry_mot.insert(0, mot_a_taper)
 entry_mot.grid(row=0, column=1, padx=20, pady=20)
 
 # Bouton pour démarrer
@@ -155,4 +158,3 @@ bouton_rejouer.grid_remove()
 
 appliquer_theme()
 root.mainloop()
-
