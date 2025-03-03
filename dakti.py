@@ -55,7 +55,7 @@ def verifier_touche(event):
         index_lettre += 1
     else:
         label_statut.config(text="✘ Erreur", fg="red")
-        parler("Erreur")
+        root.after(50, lambda: parler(mot_a_taper[index_lettre]))
         return
     
     if index_lettre < len(mot_a_taper):
@@ -82,6 +82,7 @@ def prochain_mot(event=None):
         bouton_rejouer.grid(row=4, column=1, pady=20)
 
 def demarrer(depuis_liste=False):
+    entry_mot.config(state="disabled")
     global mot_a_taper, index_lettre, mot_index
     if depuis_liste:
         mot_a_taper = liste_mots[mot_index]
@@ -99,6 +100,7 @@ def demarrer(depuis_liste=False):
         afficher_lettre_majuscule()
         label_statut.config(text="En attente...", fg="black")
         bouton_rejouer.grid_remove()
+        entry_mot.config(state="normal")
         root.unbind("<KeyPress>")
         root.bind("<KeyPress>", verifier_touche)
         parler(mot_a_taper[index_lettre])
