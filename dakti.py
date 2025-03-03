@@ -1,7 +1,6 @@
 import tkinter as tk
 import subprocess
 import sys
-import threading
 
 # Détecter le système d'exploitation
 is_windows = sys.platform.startswith('win')
@@ -30,7 +29,8 @@ afficher_majuscule = tk.BooleanVar(root, value=True)
 def parler(texte):
     if jouer_son.get():
         if is_windows:
-            threading.Thread(target=lambda: (tts_engine.say(texte), tts_engine.runAndWait())).start()
+            tts_engine.say(texte)
+            tts_engine.runAndWait()
         else:
             subprocess.run(["espeak", "-v", "fr", texte])
 
