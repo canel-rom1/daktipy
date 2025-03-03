@@ -1,5 +1,22 @@
 import tkinter as tk
 import subprocess
+import sys
+
+# Détecter le système d'exploitation
+is_windows = sys.platform.startswith('win')
+
+# Initialiser la synthèse vocale selon l'OS
+if is_windows:
+    import pyttsx3
+    tts_engine = pyttsx3.init()
+
+def parler(texte):
+    if jouer_son.get():
+        if is_windows:
+            tts_engine.say(texte)
+            tts_engine.runAndWait()
+        else:
+            subprocess.run(["espeak", "-v", "fr", texte])
 
 liste_mots = []
 mot_index = 0
@@ -138,3 +155,4 @@ bouton_rejouer.grid_remove()
 
 appliquer_theme()
 root.mainloop()
+
