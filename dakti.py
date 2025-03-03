@@ -10,14 +10,6 @@ if is_windows:
     import pyttsx3
     tts_engine = pyttsx3.init()
 
-def parler(texte):
-    if jouer_son.get():
-        if is_windows:
-            tts_engine.say(texte)
-            tts_engine.runAndWait()
-        else:
-            subprocess.run(["espeak", "-v", "fr", texte])
-
 liste_mots = []
 mot_index = 0
 mot_a_taper = "toucan"
@@ -33,6 +25,14 @@ jouer_son = tk.BooleanVar(root, value=True)
 theme_sombre = tk.BooleanVar(root, value=True)
 afficher_majuscule = tk.BooleanVar(root, value=True)
 
+def parler(texte):
+    if jouer_son.get():
+        if is_windows:
+            tts_engine.say(texte)
+            tts_engine.runAndWait()
+        else:
+            subprocess.run(["espeak", "-v", "fr", texte])
+
 def appliquer_theme():
     bg_color = "black" if theme_sombre.get() else "white"
     fg_color = "white" if theme_sombre.get() else "black"
@@ -43,10 +43,6 @@ def appliquer_theme():
     entry_mot.config(bg=bg_color, fg=fg_color, insertbackground=fg_color)
     bouton_demarrer.config(bg=bg_color, fg=fg_color)
     bouton_rejouer.config(bg=bg_color, fg=fg_color)
-
-def parler(texte):
-    if jouer_son.get():
-        subprocess.run(["espeak", "-v", "fr", texte])
 
 def verifier_touche(event):
     global index_lettre, mot_index
@@ -67,9 +63,8 @@ def verifier_touche(event):
         parler(mot_a_taper[index_lettre])  # Annonce de la prochaine lettre
     else:
         label_statut.config(text="🎉 Mot correct !", fg="blue")
-        parler("Bravo !")
-        parler("Le mot était")
-        root.after(200, lambda: parler(mot_a_taper))
+        parler("Bravo ! Le mot était")
+        root.after(50, lambda: parler(mot_a_taper))
         root.bind("<Return>", prochain_mot)
 
 def afficher_lettre_majuscule():
