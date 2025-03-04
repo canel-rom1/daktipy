@@ -1,3 +1,4 @@
+import logging
 import tkinter as tk
 import subprocess
 import sys
@@ -12,21 +13,39 @@ if is_windows:
 
 liste_mots = []
 mot_index = 0
-
 mot_a_taper = "toucan"
 index_lettre = 0
+log_file = "daktipy_log.txt"
 
 # Création de la fenêtre
 root = tk.Tk()
-root.title("Dactylo avec espeak")
+root.title("DaktiPy")
 root.geometry("1000x600")
 
 afficher_lettre = tk.BooleanVar(root, value=True)
 jouer_son = tk.BooleanVar(root, value=True)
 theme_sombre = tk.BooleanVar(root, value=True)
 afficher_majuscule = tk.BooleanVar(root, value=True)
+logging_enabled = tk.BooleanVar(value=True)
+
+def log_exceptions(exc_type, exc_value, exc_traceback):
+    if logging_enabled.get():
+        logging.error("Une exception s'est produite", exc_info=(exc_type, exc_value, exc_traceback))
+
+def toggle_logging():
+    if logging_enabled.get():
+        logging.basicConfig(filename=log_file, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+        sys.excepthook = log_exceptions
+        logging.debug("Logging activé")
+    else:
+        logging.shutdown()
+
+def log_message(message):
+    if logging_enabled.get():
+        logging.debug(message)
 
 def parler(texte):
+    log_message(f"Synthèse vocale : {texte}")
     if jouer_son.get():
         if is_windows:
             tts_engine.say(texte)
@@ -47,6 +66,7 @@ def appliquer_theme():
 
 def verifier_touche(event):
     global index_lettre, mot_index
+    log_message(f"Touche pressée : {event.keysym}")
     if not mot_a_taper or index_lettre >= len(mot_a_taper):
         return
 
@@ -121,6 +141,7 @@ menu_options.add_checkbutton(label="Afficher la lettre", variable=afficher_lettr
 menu_options.add_checkbutton(label="Jouer le son", variable=jouer_son)
 menu_options.add_checkbutton(label="Thème sombre", variable=theme_sombre, command=appliquer_theme)
 menu_options.add_checkbutton(label="Afficher en majuscules", variable=afficher_majuscule, command=afficher_lettre_majuscule)
+menu_options.add_checkbutton(label="Activer les logs", variable=logging_enabled, command=toggle_logging)
 menu_bar.add_cascade(label="Options", menu=menu_options)
 
 root.config(menu=menu_bar)
@@ -155,4 +176,5 @@ bouton_rejouer.grid(row=4, column=1, pady=20)
 bouton_rejouer.grid_remove()
 
 appliquer_theme()
+toggle_logging()
 root.mainloop()
