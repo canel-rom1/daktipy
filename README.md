@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/logo_daktipy.jpg" width="500" />
+</p>
+
 # daktipy
 Programme de dactylographie conçu pour les personnes malvoyantes, avec synthèse
 vocale et affichage à fort contraste.
